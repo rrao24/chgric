@@ -8,4 +8,5 @@ $( document ).ready(function() {
 
 $(function(){
     $( "#target" ).load( "https://rrao24.github.io/chgric/gric.csv" );
+    console.log("ready");
 });
