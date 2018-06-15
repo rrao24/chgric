@@ -1,20 +1,17 @@
-
-
-
-
 $( document ).ready(function() {
-    console.log( "ready!" );
-});
-
-$(function(){
+	//Get data from csv
     $( "#target" ).load("https://rrao24.github.io/chgric/gric.csv", function() {
+    	//Parse csv
     	Papa.parse($("#target").text(), {
 			complete: function(results) {
-				console.log(results);
+				//console.log(results);
+				
 				results = results.data;
 				var currentGame = 1;
 				var games = [];
 				var game = {};
+
+				//Iterate through all lines in excel sheet
 				for (var i = 1; i < results.length; i++) {
 					var gameNo = parseInt(results[i][0]);
 					if (currentGame == gameNo) {
@@ -44,12 +41,16 @@ $(function(){
 						game.players.push(playerStats);
 					} else {
 						currentGame++;
+						game = deriveStats(game);
 						games.push(game);
 						game = {};
 						i--;
 					}
 				}
+
+				game = deriveStats(game);
 				games.push(game);
+
 				$('#target').append('<br><br>');
 				$('#target').append(JSON.stringify(games));
 				console.log(games);
@@ -57,3 +58,23 @@ $(function(){
 		});
     });
 });
+
+//Get winner, max score, average score of game object
+function deriveStats(game) {
+	var maxScore = 0;
+	var avgScore = 0;
+	var winner = "";
+	for (var j = 0; j < game.players.length; j++) {
+		if (game.players[j].total > maxScore) {
+			maxScore = game.players[j].total;
+			winner = game.players[j].name;
+		}
+		avgScore += game.players[j].total;
+	}
+	avgScore = avgScore / game.players.length;
+	avgScore = avgScore.toFixed(2);
+	game.maxScore = maxScore;
+	game.winner = winner;
+	game.avgScore = avgScore;
+	return game;
+}
