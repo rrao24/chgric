@@ -1,3 +1,18 @@
-div.box {
+#nav ul li {
+ display: inline;
+ margin: 0 20px 0 0;
+ margin-bottom: 130px;
+}
+ 
+#nav a {
+ text-decoration: none;
+ color: black;
+}
+ 
+#nav a:hover {
+ text-decoration: underline;
+}
 
+#nav {
+ margin-top: 20px;
 }

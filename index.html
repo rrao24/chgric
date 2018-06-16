@@ -21,7 +21,8 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="stylesheet" href="styles/normalize.css">
   <link rel="stylesheet" href="styles/skeleton.css">
-
+  <link rel="stylesheet" href="styles/index.css">
+  
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="icon" type="image/png" href="images/favicon.png">
@@ -38,134 +39,176 @@
 
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <div class="container">
-    <div class="row">
-      <div class="one-half column" style="margin-top: 25%">
-        <h4>Game View</h4>
-        <p>Here all the games are displayed in order </p>
-		
-		<!-- Prepopulated table (will be removed later)
-		–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-		<table class="u-full-width">
-		  <thead>
-			<tr>
-			  <th>Game</th>
-			  <th>Player</th>
-			  <th>Fields</th>
-			  <th>Pastures</th>
-			  <th>Grain</th>
-			  <th>Vegetables</th>
-			  <th>Sheep</th>
-			  <th>Boar</th>
-			  <th>Cattle</th>
-			  <th>Unused</th>
-			  <th>Fenced Stables</th>
-			  <th>Clay rooms</th>
-			  <th>Stone rooms</th>
-			  <th>Family</th>
-			  <th>Cards</th>
-			  <th>Bonus</th>
-			  <th>Total</th>
-			
-			</tr>
-		  </thead>
-		  <tbody>
-			<tr>
-			
-			  <td>1</td>
-			  <td>James</td>
-			  <td>-1</td>
-			  <td>2</td>
-			  <td>1</td>
-			  <td>-1</td>
-			  <td>2</td>
-			  <td>-1</td>
-			  <td>0</td>
-			  <td>-2</td>
-			  <td>1</td>
-			  <td>5</td>
-			  <td>0</td>
-			  <td>12</td>
-			  <td>3</td>
-			  <td>0</td>
-			  <td>20</td>
-			</tr>
-			<tr>
-			  <td>1</td>
-			  <td>Nico</td>
-			  <td>-1</td>
-			  <td>4</td>
-			  <td>-1</td>
-			  <td>-1</td>
-			  <td>-1</td>
-			  <td>-1</td>
-			  <td>0</td>
-			  <td>-5</td>
-			  <td>1</td>
-			  <td>0</td>
-			  <td>6</td>
-			  <td>15</td>
-			  <td>1</td>
-			  <td>0</td>
-			  <td>16</td>
-			</tr>
-			<tr>
-			  <td>1</td>
-			  <td>Calvin</td>
-			  <td>2</td>
-			  <td>4</td>
-			  <td>2</td>
-			  <td>2</td>
-			  <td>-1</td>
-			  <td>2</td>
-			  <td>2</td>
-			  <td>0</td>
-			  <td>1</td>
-			  <td>0</td>
-			  <td>0</td>
-			  <td>9</td>
-			  <td>-11</td>
-			  <td>0</td>
-			  <td>12</td>
-			</tr>
-			<tr>
-			  <td>1</td>
-			  <td>Ram</td>
-			  <td>-1</td>
-			  <td>4</td>
-			  <td>1</td>
-			  <td>-1</td>
-			  <td>1</td>
-			  <td>1</td>
-			  <td>1</td>
-			  <td>0</td>
-			  <td>0</td>
-			  <td>0</td>
-			  <td>8</td>
-			  <td>12</td>
-			  <td>1</td>
-			  <td>0</td>
-			  <td>27</td>
-			</tr>
-			
-			
-		  </tbody>
-		</table>
-		
-		
-      </div>
-    </div>
-	<div id="target" class="row">
+	<div class="container">
+		<div class="row">
+		<div class="two columns">
+		<img src="images/agricola_logo.jpg" class="u-max-full-width">
+		</div>
 
-		
+		<div id="nav" class="ten columns">
+		 <ul>
+		 <li><a id="home_link"  href="#" onclick="changePage('home')";>Home</a></li>
+		 <li><a id="table_link" href="#" onclick="changePage('table')">Tables</a></li>
+		 <li><a id="graph_link" href="#" onclick="changePage('graph')">Graphs</a></li>
+		 <li><a id="search_link"href="#" onclick="changePage('search')">Search</a></li>
+		 </ul>
+		</div>
+		</div>
+	</div>
+	<!-- Hidden data ––––––––––––––––––––––––––––––––– -->
+	<div id="target" hidden>
+		<!-- This div holds csv info-->
+	</div>
+ 
+ 	<!-- Home Page ––––––––––––––––––––––––––––––––– -->
+	<div id="home" class="container">
+		<div class="row">
+		<div class="twelve columns">
+			<p>Welcome to the Agricola data viewing project!</p>
+		</div>
+		</div>
 		
 	</div>
-	<div id="playerSelect">
+ 
+ 
+	<!-- Table Page ––––––––––––––––––––––––––––––––– -->
+	<div id="table" class="container" hidden>
+		<div class="row">
+			<div class="twelve columns">
+				<h4>Game View</h4>
+				<p>Here all the games are displayed in order </p>
+				
+				<!-- Prepopulated table (will be removed later)
+				–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+				<table class="u-full-width">
+				  <thead>
+					<tr>
+					  <th>Game</th>
+					  <th>Player</th>
+					  <th>Fields</th>
+					  <th>Pastures</th>
+					  <th>Grain</th>
+					  <th>Vegetables</th>
+					  <th>Sheep</th>
+					  <th>Boar</th>
+					  <th>Cattle</th>
+					  <th>Unused</th>
+					  <th>Fenced Stables</th>
+					  <th>Clay rooms</th>
+					  <th>Stone rooms</th>
+					  <th>Family</th>
+					  <th>Cards</th>
+					  <th>Bonus</th>
+					  <th>Total</th>
+					
+					</tr>
+				  </thead>
+				  <tbody>
+					<tr>
+					
+					  <td>1</td>
+					  <td>James</td>
+					  <td>-1</td>
+					  <td>2</td>
+					  <td>1</td>
+					  <td>-1</td>
+					  <td>2</td>
+					  <td>-1</td>
+					  <td>0</td>
+					  <td>-2</td>
+					  <td>1</td>
+					  <td>5</td>
+					  <td>0</td>
+					  <td>12</td>
+					  <td>3</td>
+					  <td>0</td>
+					  <td>20</td>
+					</tr>
+					<tr>
+					  <td>1</td>
+					  <td>Nico</td>
+					  <td>-1</td>
+					  <td>4</td>
+					  <td>-1</td>
+					  <td>-1</td>
+					  <td>-1</td>
+					  <td>-1</td>
+					  <td>0</td>
+					  <td>-5</td>
+					  <td>1</td>
+					  <td>0</td>
+					  <td>6</td>
+					  <td>15</td>
+					  <td>1</td>
+					  <td>0</td>
+					  <td>16</td>
+					</tr>
+					<tr>
+					  <td>1</td>
+					  <td>Calvin</td>
+					  <td>2</td>
+					  <td>4</td>
+					  <td>2</td>
+					  <td>2</td>
+					  <td>-1</td>
+					  <td>2</td>
+					  <td>2</td>
+					  <td>0</td>
+					  <td>1</td>
+					  <td>0</td>
+					  <td>0</td>
+					  <td>9</td>
+					  <td>-11</td>
+					  <td>0</td>
+					  <td>12</td>
+					</tr>
+					<tr>
+					  <td>1</td>
+					  <td>Ram</td>
+					  <td>-1</td>
+					  <td>4</td>
+					  <td>1</td>
+					  <td>-1</td>
+					  <td>1</td>
+					  <td>1</td>
+					  <td>1</td>
+					  <td>0</td>
+					  <td>0</td>
+					  <td>0</td>
+					  <td>8</td>
+					  <td>12</td>
+					  <td>1</td>
+					  <td>0</td>
+					  <td>27</td>
+					</tr>
+					
+					
+				  </tbody>
+				</table>
+			</div>
+		</div>
 	</div>
-	<canvas id="gricVisual"></canvas>
+	
+	<!-- Graph Page ––––––––––––––––––––––––––––––––– -->
+	<div id="graph" class="container" hidden>
+		<div class="row">
+			<div id="playerSelect" class="twelve columns">
+			</div>
+		</div>
+		<div class="row">
+			<canvas id="gricVisual"></canvas>
+		</div>
+	</div>
 
-  </div>
-
+	<!-- Search Page ––––––––––––––––––––––––––––––––– -->
+	<div id="search" class="container" hidden>
+		<div class="row">
+			<div class="twelve columns">
+				<p>Searching and querying are coming soon!</p>
+			</div>
+		</div>
+	</div>
+	
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>

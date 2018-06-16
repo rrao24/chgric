@@ -1,4 +1,9 @@
+	//Holds names of all pages on site
+	var pages = ["home","table","graph","search"];
+
+
 $( document ).ready(function() {
+	changePage("home");
 	/** Global Variables **/
 
 	//Hold all game objects to be used by any and all functions
@@ -86,6 +91,8 @@ $( document ).ready(function() {
 				$('#playerSelect').append(playerOptionStr);
 			}
 		});
+		
+		
     });
 
     //Generate associated line graph for scores upon user clicking a player's name
@@ -141,4 +148,12 @@ function deriveStats(game) {
 	game.winner = winner;
 	game.avgScore = avgScore;
 	return game;
+}
+
+//Switches between pages on site
+function changePage(name) {
+	for (var j = 0; j < pages.length; j++) {
+		$("#"+pages[j]).hide();
+	}
+	$("#"+name).show();
 }
