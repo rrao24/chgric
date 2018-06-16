@@ -96,11 +96,8 @@ $( document ).ready(function() {
     	var ctx = document.getElementById('gricVisual').getContext('2d');
 		var xLabels = [];
 		for (var q = 0; q<playerToScoreArrayDict[selectedPlayer].length; q++) {
-			if ((q+1) % 4 == 1) {
-				xLabels.push(q+1);
-			} else {
-				xLabels.push("");
-			}
+			var v = q+1;
+			xLabels.push("Game #" + v);
 		}
 
 		var chart = new Chart(ctx, {
@@ -115,7 +112,13 @@ $( document ).ready(function() {
 		            data: playerToScoreArrayDict[selectedPlayer],
 		        }]
 		    },
-		    options: {}
+		    options: {
+		    	scales: {
+		    		xAxes: [{
+		    			display: false
+		    		}]
+		    	}
+		    }
 		});
     });
 });
