@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="styles/normalize.css">
   <link rel="stylesheet" href="styles/skeleton.css">
   <link rel="stylesheet" href="styles/index.css">
+  <link rel="stylesheet" href="styles/chart.css">
   
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -29,7 +30,7 @@
 
   <!-- Script
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.5.0/papaparse.min.js"></script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script type="text/javascript" src="scripts/main.js"></script>
@@ -195,8 +196,13 @@
 			<div id="playerSelect" class="twelve columns">
 			</div>
 		</div>
-		<div class="row">
+		<!-- Container for chart and legend ––––––––––––––––––––––––––––––––– -->
+		<div class="row" id="visualContainer">
+			<!-- This is the legend ––––––––––––––––––––––––––––––––– -->
+			<div id="visualLegend"></div>
+			<!-- This is the actual chart ––––––––––––––––––––––––––––––––– -->
 			<canvas id="gricVisual"></canvas>
+			<div id="winPct"></div>
 		</div>
 	</div>
 

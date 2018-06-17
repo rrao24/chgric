@@ -13,6 +13,12 @@ $( document ).ready(function() {
 	//used by graphing function
 	var playerToScoreArrayDict = {};
 
+	//Dictionary of game number to winner of game
+	var gameWinners = [""];
+
+	//Hold current chart
+	var chart;
+
 	//Get data from csv
     $( "#target" ).load("https://rrao24.github.io/chgric/gric.csv", function() {
     	//Parse csv
@@ -54,14 +60,14 @@ $( document ).ready(function() {
 						game.players.push(playerStats);
 					} else {
 						currentGame++;
-						game = deriveStats(game);
+						game = deriveStats(game, gameWinners);
 						games.push(game);
 						game = {};
 						i--;
 					}
 				}
 
-				game = deriveStats(game);
+				game = deriveStats(game, gameWinners);
 				games.push(game);
 
 				$('#target').append('<br><br>');
@@ -71,13 +77,14 @@ $( document ).ready(function() {
 				//Populate player to score dictionary
 				for (var l = 0; l < games.length; l++) {
 					var tempStats = games[l].players;
+					var tempGameNo = games[l].gameNumber;
 					for (var m = 0; m < tempStats.length; m++) {
 						var currName = tempStats[m].name;
 						var currScore = tempStats[m].total;
 						if (!playerToScoreArrayDict[currName]) {
 							playerToScoreArrayDict[currName] = [];
 						}
-						playerToScoreArrayDict[currName].push(currScore);
+						playerToScoreArrayDict[currName].push({score: currScore, gameNumber: tempGameNo});
 					}
 				}
 
@@ -99,27 +106,69 @@ $( document ).ready(function() {
     $(document).on('change', '#playerOption', function(e) {
     	e.stopPropagation();
     	e.preventDefault();
+
+    	//Remove existing chart, if it exists
+    	if (chart) {
+    		chart.destroy();
+    	}
+    	//Remove existing legend and winpct, if it exists
+    	$('#visualLegend').empty();
+    	$('#winPct').empty();
+
     	var selectedPlayer = $('#playerOption').val();
     	var ctx = document.getElementById('gricVisual').getContext('2d');
+
+    	//Create labels for each data point
 		var xLabels = [];
 		for (var q = 0; q<playerToScoreArrayDict[selectedPlayer].length; q++) {
 			var v = q+1;
 			xLabels.push("Game #" + v);
 		}
 
-		var chart = new Chart(ctx, {
+		//Get scores for selected player
+		var graphScores = [];
+		for (var y = 0; y<playerToScoreArrayDict[selectedPlayer].length; y++) {
+			graphScores.push(playerToScoreArrayDict[selectedPlayer][y].score);
+		}
+
+		//Make wins a different color
+		var highlightedWinPointBackgroundColors = [];
+
+		//Initialize chart with xLabels, graphScores
+		chart = new Chart(ctx, {
 		    type: 'line',
 		    data: {
 		        labels: xLabels,
 		        datasets: [{
 		            label: "Score",
 		            fill: false,
+		            pointBackgroundColor: highlightedWinPointBackgroundColors,
 		            backgroundColor: 'rgb(255, 99, 132)',
 		            borderColor: 'rgb(255, 99, 132)',
-		            data: playerToScoreArrayDict[selectedPlayer],
+		            data: graphScores,
 		        }]
 		    },
 		    options: {
+		    	//Disable auto generated legend
+		    	legend: {
+		    		display: false
+		    	},
+		    	//Custom legend function
+		    	legendCallback: function(chart) {
+		    		var text = [];
+			 		text.push('<ul class="0-legend">');
+			 		for (var i = 0; i < chart.data.datasets.length; i++) {
+			 			text.push('<li><span style="background-color:' 
+			 				+ chart.data.datasets[i].backgroundColor + '"></span>');
+			 			if (chart.data.datasets[i].label) {
+			 				text.push(chart.data.datasets[i].label);
+			 			}
+			 			text.push('</li>');
+			 		}
+			 		text.push('<li><span style="background-color:yellow"></span>Win</li>');
+			 		text.push('</ul>'); 
+			 		return text.join('');
+		    	},
 		    	scales: {
 		    		xAxes: [{
 		    			display: false
@@ -127,11 +176,33 @@ $( document ).ready(function() {
 		    	}
 		    }
 		});
+
+		//Append custom legend
+		$('#visualLegend').append(chart.generateLegend());
+
+		//Used to calculate win percentage
+		var wins = 0;
+
+		//Update chart with different colors for wins
+		for (var x = 0; x<playerToScoreArrayDict[selectedPlayer].length; x++) {
+			var currGame = playerToScoreArrayDict[selectedPlayer][x].gameNumber;
+			if (gameWinners[currGame] == selectedPlayer) {
+				highlightedWinPointBackgroundColors.push("yellow");
+				wins++;
+			} else {
+				highlightedWinPointBackgroundColors.push("rgb(255, 99, 132)");
+			}
+		}
+		chart.update();
+
+		//Display win percentage
+		var winPct = (wins/(playerToScoreArrayDict[selectedPlayer].length)).toFixed(2);
+		$('#winPct').append('Win Percentage: ' + winPct);
     });
 });
 
 //Get winner, max score, average score of game object
-function deriveStats(game) {
+function deriveStats(game, gameWinners) {
 	var maxScore = 0;
 	var avgScore = 0;
 	var winner = "";
@@ -147,6 +218,10 @@ function deriveStats(game) {
 	game.maxScore = maxScore;
 	game.winner = winner;
 	game.avgScore = avgScore;
+
+	//Update gameWinners dictionary
+	gameWinners.push(winner);
+
 	return game;
 }
 
