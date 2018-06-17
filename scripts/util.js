@@ -41,7 +41,6 @@ function getLabelsPerGame(games) {
 		var v = q+1;
 		xLabels.push("Game #" + v);
 	}
-	console.log('here');
 	return xLabels;
 }
 
@@ -52,6 +51,32 @@ function getScoresForPlayer(player) {
 		scores.push(playerToScoreArrayDict[player][y].score);
 	}
 	return scores;
+}
+
+//Get games for which all players in the playerNames array have participated in
+function getGamesForPlayers(playerNames) {
+	var gamesIncludingAllPlayers = [];
+	for (var i = 0; i<games.length; i++) {
+		var tmpPlayers = [];
+		for (var j = 0; j<games[i].players.length; j++) {
+			tmpPlayers.push(games[i].players[j].name);
+		}
+		var expectedLength = playerNames.length;
+		var actualLength = intersectArrays(playerNames, tmpPlayers).length;
+		if (expectedLength == actualLength) {
+			gamesIncludingAllPlayers.push(games[i]);
+		}
+	}
+	return gamesIncludingAllPlayers;
+}
+
+//Return the intersection of 2 arrays
+function intersectArrays(a, b) {
+    var t;
+    if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
+    return a.filter(function (e) {
+        return b.indexOf(e) > -1;
+    });
 }
 
 //Get winner, max score, average score of game object
