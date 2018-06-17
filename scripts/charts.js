@@ -119,11 +119,11 @@ function buildLineGraph(ctx, selectedPlayer) {
 		    }
 		});
 
-		//Append custom legend
-		$('#visualLegend').append(chart.generateLegend());
-
 		//Used to calculate win percentage
 		var wins = 0;
+
+		//get random background color
+		var rndmColor = getBackgroundColors([""]);
 
 		//Update chart with different colors for wins
 		for (var x = 0; x<playerToScoreArrayDict[selectedPlayer].length; x++) {
@@ -132,10 +132,15 @@ function buildLineGraph(ctx, selectedPlayer) {
 				highlightedWinPointBackgroundColors.push("yellow");
 				wins++;
 			} else {
-				highlightedWinPointBackgroundColors.push("rgb(255, 99, 132)");
+				highlightedWinPointBackgroundColors.push(rndmColor);
+				chart.data.datasets[0].borderColor = rndmColor;
+				chart.data.datasets[0].backgroundColor = rndmColor;
 			}
 		}
 		chart.update();
+
+		//Append custom legend
+		$('#visualLegend').append(chart.generateLegend());
 
 		//Display win percentage
 		var winPct = (wins/(playerToScoreArrayDict[selectedPlayer].length)).toFixed(2);
