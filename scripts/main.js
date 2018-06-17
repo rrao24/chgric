@@ -125,11 +125,13 @@ $( document ).ready(function() {
 			chartOptionStr += '</select> Graph';
 			$('#playerSelect').append(chartOptionStr);
 
-			//Store all player names
+			//Store all player names who have won a game
     		var xLabels = [];
     		var names = Object.keys(playerToScoreArrayDict);
     		for (var q = 0; q<names.length; q++) {
-    			xLabels.push(names[q]);
+    			if (gameWinners.indexOf(names[q]) > 0) {
+    				xLabels.push(names[q]);
+    			}
     		}
 
     		//Get wins by each player, in order of xLabels
@@ -165,8 +167,10 @@ $( document ).ready(function() {
     			}
     		});
     	} else if (selectedChartType == "Line") {
+    		
     		//Generate custom player options for line chart
     		var playerOptionStr = ' For: <select id="playerOption" name="players">';
+    		playerOptionStr += '<option value="default">--</option>'
     		var playerNames = Object.keys(playerToScoreArrayDict);
 			for (var p = 0; p < playerNames.length; p++) {
 				playerOptionStr += '<option value="' + playerNames[p] + '">' + playerNames[p] + '</option>';
@@ -192,86 +196,90 @@ $( document ).ready(function() {
     	var selectedPlayer = $('#playerOption').val();
     	var ctx = document.getElementById('gricVisual').getContext('2d');
 
-    	//Create labels for each data point
-		var xLabels = [];
-		for (var q = 0; q<playerToScoreArrayDict[selectedPlayer].length; q++) {
-			var v = q+1;
-			xLabels.push("Game #" + v);
-		}
+    	//execute if change is legitimate
+    	if (selectedPlayer !== "default") {
 
-		//Get scores for selected player
-		var graphScores = [];
-		for (var y = 0; y<playerToScoreArrayDict[selectedPlayer].length; y++) {
-			graphScores.push(playerToScoreArrayDict[selectedPlayer][y].score);
-		}
-
-		//Make wins a different color
-		var highlightedWinPointBackgroundColors = [];
-
-		//Initialize chart with xLabels, graphScores
-		chart = new Chart(ctx, {
-		    type: 'line',
-		    data: {
-		        labels: xLabels,
-		        datasets: [{
-		            label: "Score",
-		            fill: false,
-		            pointBackgroundColor: highlightedWinPointBackgroundColors,
-		            backgroundColor: 'rgb(255, 99, 132)',
-		            borderColor: 'rgb(255, 99, 132)',
-		            data: graphScores,
-		        }]
-		    },
-		    options: {
-		    	//Disable auto generated legend
-		    	legend: {
-		    		display: false
-		    	},
-		    	//Custom legend function
-		    	legendCallback: function(chart) {
-		    		var text = [];
-			 		text.push('<ul class="0-legend">');
-			 		for (var i = 0; i < chart.data.datasets.length; i++) {
-			 			text.push('<li><span style="background-color:' 
-			 				+ chart.data.datasets[i].backgroundColor + '"></span>');
-			 			if (chart.data.datasets[i].label) {
-			 				text.push(chart.data.datasets[i].label);
-			 			}
-			 			text.push('</li>');
-			 		}
-			 		text.push('<li><span style="background-color:yellow"></span>Win</li>');
-			 		text.push('</ul>'); 
-			 		return text.join('');
-		    	},
-		    	scales: {
-		    		xAxes: [{
-		    			display: false
-		    		}]
-		    	}
-		    }
-		});
-
-		//Append custom legend
-		$('#visualLegend').append(chart.generateLegend());
-
-		//Used to calculate win percentage
-		var wins = 0;
-
-		//Update chart with different colors for wins
-		for (var x = 0; x<playerToScoreArrayDict[selectedPlayer].length; x++) {
-			var currGame = playerToScoreArrayDict[selectedPlayer][x].gameNumber;
-			if (gameWinners[currGame] == selectedPlayer) {
-				highlightedWinPointBackgroundColors.push("yellow");
-				wins++;
-			} else {
-				highlightedWinPointBackgroundColors.push("rgb(255, 99, 132)");
+	    	//Create labels for each data point
+			var xLabels = [];
+			for (var q = 0; q<playerToScoreArrayDict[selectedPlayer].length; q++) {
+				var v = q+1;
+				xLabels.push("Game #" + v);
 			}
-		}
-		chart.update();
 
-		//Display win percentage
-		var winPct = (wins/(playerToScoreArrayDict[selectedPlayer].length)).toFixed(2);
-		$('#winPct').append('Win Percentage: ' + winPct);
+			//Get scores for selected player
+			var graphScores = [];
+			for (var y = 0; y<playerToScoreArrayDict[selectedPlayer].length; y++) {
+				graphScores.push(playerToScoreArrayDict[selectedPlayer][y].score);
+			}
+
+			//Make wins a different color
+			var highlightedWinPointBackgroundColors = [];
+
+			//Initialize chart with xLabels, graphScores
+			chart = new Chart(ctx, {
+			    type: 'line',
+			    data: {
+			        labels: xLabels,
+			        datasets: [{
+			            label: "Score",
+			            fill: false,
+			            pointBackgroundColor: highlightedWinPointBackgroundColors,
+			            backgroundColor: 'rgb(255, 99, 132)',
+			            borderColor: 'rgb(255, 99, 132)',
+			            data: graphScores,
+			        }]
+			    },
+			    options: {
+			    	//Disable auto generated legend
+			    	legend: {
+			    		display: false
+			    	},
+			    	//Custom legend function
+			    	legendCallback: function(chart) {
+			    		var text = [];
+				 		text.push('<ul class="0-legend">');
+				 		for (var i = 0; i < chart.data.datasets.length; i++) {
+				 			text.push('<li><span style="background-color:' 
+				 				+ chart.data.datasets[i].backgroundColor + '"></span>');
+				 			if (chart.data.datasets[i].label) {
+				 				text.push(chart.data.datasets[i].label);
+				 			}
+				 			text.push('</li>');
+				 		}
+				 		text.push('<li><span style="background-color:yellow"></span>Win</li>');
+				 		text.push('</ul>'); 
+				 		return text.join('');
+			    	},
+			    	scales: {
+			    		xAxes: [{
+			    			display: false
+			    		}]
+			    	}
+			    }
+			});
+
+			//Append custom legend
+			$('#visualLegend').append(chart.generateLegend());
+
+			//Used to calculate win percentage
+			var wins = 0;
+
+			//Update chart with different colors for wins
+			for (var x = 0; x<playerToScoreArrayDict[selectedPlayer].length; x++) {
+				var currGame = playerToScoreArrayDict[selectedPlayer][x].gameNumber;
+				if (gameWinners[currGame] == selectedPlayer) {
+					highlightedWinPointBackgroundColors.push("yellow");
+					wins++;
+				} else {
+					highlightedWinPointBackgroundColors.push("rgb(255, 99, 132)");
+				}
+			}
+			chart.update();
+
+			//Display win percentage
+			var winPct = (wins/(playerToScoreArrayDict[selectedPlayer].length)).toFixed(2);
+			$('#winPct').append('Win Percentage: ' + winPct);
+		}
     });
 });
 
