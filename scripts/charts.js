@@ -47,6 +47,66 @@ function generateLineChartOptions() {
 	$('#playerSelect').append(playerOptionStr);
 }
 
+function generateMoreLineChartOptions() {
+	//Generate custom additional options for line chart
+	$('#against').remove();
+	var playersOptionStr = ' <span id="against">Against: <select id="againstOption" name="players[]" size="5" multiple>';
+	var playerNames = Object.keys(playerToScoreArrayDict);
+	var doNotInclude = $('#playerOption').val();
+	for (var p = 0; p < playerNames.length; p++) {
+		if (playerNames[p] !== doNotInclude) {
+			playersOptionStr += '<option value="' + playerNames[p] + '">' + playerNames[p] + '</option>';
+		}
+	}
+	playersOptionStr += '</select></span>';
+	$('#playerSelect').append(playersOptionStr);
+	$('#againstOption').chosen();
+}
+
+function buildMultiLineGraph(ctx, initialPlayer, selectedPlayers) {
+	//Get games
+	selectedPlayers.push(initialPlayer);
+	var games = getGamesForPlayers(selectedPlayers);
+
+	//Create labels for each data point
+	var xLabels = getLabelsPerGame(games);
+
+	//Different color for each player
+	var graphColors = getBackgroundColors(selectedPlayers);
+
+	//Get scores for each player
+	var scoresForPlayers = getScoresForPlayersOverGames(selectedPlayers, games);
+	console.log(scoresForPlayers);
+
+	//Create a dataset for each player
+	var datasets = [];
+	for (var i = 0; i < selectedPlayers.length; i++) {
+		datasets[i] = {
+			label: selectedPlayers[i],
+			fill: false,
+			backgroundColor: graphColors[i],
+			borderColor: graphColors[i],
+			data: scoresForPlayers[selectedPlayers[i]]
+		};
+	}
+
+	//Create chart
+	chart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: xLabels,
+			datasets: datasets
+		},
+		options: {
+			scales: {
+				xAxes: [{
+					display: false
+				}]
+			}
+		}
+	});
+}
+
 function buildLineGraph(ctx, selectedPlayer) {
 	//execute if change is legitimate
 	if (selectedPlayer !== "default") {

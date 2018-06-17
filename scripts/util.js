@@ -53,6 +53,22 @@ function getScoresForPlayer(player) {
 	return scores;
 }
 
+//Get array of scores for players over certain games
+function getScoresForPlayersOverGames(players, games) {
+	var scoresDict = {};
+	for (var i = 0; i < players.length; i++) {
+		scoresDict[players[i]] = [];
+	}
+	for (var j = 0; j < games.length; j++) {
+		for (var k = 0; k < games[j].players.length; k++) {
+			if (scoresDict[games[j].players[k].name]) {
+				scoresDict[games[j].players[k].name].push(games[j].players[k].total);
+			}
+		}
+	}
+	return scoresDict;
+}
+
 //Get games for which all players in the playerNames array have participated in
 function getGamesForPlayers(playerNames) {
 	var gamesIncludingAllPlayers = [];

@@ -123,6 +123,23 @@ $( document ).ready(function() {
     	var ctx = document.getElementById('gricVisual').getContext('2d');
 
     	buildLineGraph(ctx, selectedPlayer);
+
+    	generateMoreLineChartOptions();
+    });
+
+    //Generate associated line graph for scores upon clicking multiple players
+    $(document).on('change', '#againstOption', function(e) {
+    	cleanUpChart(e);
+
+    	var initialPlayer = $('#playerOption').val();
+    	var selectedPlayers = $('#againstOption').val();
+    	var ctx = document.getElementById('gricVisual').getContext('2d');
+
+    	if (selectedPlayers.length > 0) {
+    		buildMultiLineGraph(ctx, initialPlayer, selectedPlayers);
+    	} else {
+    		buildLineGraph(ctx, initialPlayer);
+    	}
     });
 });
 
