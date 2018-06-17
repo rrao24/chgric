@@ -126,30 +126,6 @@ $( document ).ready(function() {
     });
 });
 
-//Get winner, max score, average score of game object
-function deriveStats(game, gameWinners) {
-	var maxScore = 0;
-	var avgScore = 0;
-	var winner = "";
-	for (var j = 0; j < game.players.length; j++) {
-		if (game.players[j].total > maxScore) {
-			maxScore = game.players[j].total;
-			winner = game.players[j].name;
-		}
-		avgScore += game.players[j].total;
-	}
-	avgScore = avgScore / game.players.length;
-	avgScore = avgScore.toFixed(2);
-	game.maxScore = maxScore;
-	game.winner = winner;
-	game.avgScore = avgScore;
-
-	//Update gameWinners dictionary
-	gameWinners.push(winner);
-
-	return game;
-}
-
 //Switches between pages on site
 function changePage(name) {
 	for (var j = 0; j < pages.length; j++) {

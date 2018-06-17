@@ -9,33 +9,17 @@ function buildPieChart(ctx) {
 	$('#playerSelect').append(chartOptionStr);
 
 	//Store all player names who have won a game
-	var xLabels = [];
-	var names = Object.keys(playerToScoreArrayDict);
-	for (var q = 0; q<names.length; q++) {
-		if (gameWinners.indexOf(names[q]) > 0) {
-			xLabels.push(names[q]);
-		}
-	}
+	var xLabels = getWinnersUnique();
 
 	//Get wins by each player, in order of xLabels
 	var graphWins = [];
-	var winsByPlayer = {};
-	for (var k = 0; k < gameWinners.length; k++) {
-		if (!winsByPlayer[gameWinners[k]]) {
-			winsByPlayer[gameWinners[k]] = 1;
-		} else {
-			winsByPlayer[gameWinners[k]]++;
-		}
-	}
+	var winsByPlayer = getWinsByPlayer();
 	for (var y = 0; y<xLabels.length; y++) {
 		graphWins.push(winsByPlayer[xLabels[y]]);
 	}
 
 	//Get as many background colors as players
-	var graphColors = [];
-	for (var x = 0; x<xLabels.length; x++) {
-		graphColors.push(backgroundColors[x]);
-	}
+	var graphColors = getBackgroundColors(xLabels);
 
 	//Create chart
 	chart = new Chart(ctx, {
@@ -68,17 +52,10 @@ function buildLineGraph(ctx, selectedPlayer) {
 	if (selectedPlayer !== "default") {
 
     	//Create labels for each data point
-		var xLabels = [];
-		for (var q = 0; q<playerToScoreArrayDict[selectedPlayer].length; q++) {
-			var v = q+1;
-			xLabels.push("Game #" + v);
-		}
+		var xLabels = getLabelsPerGame(playerToScoreArrayDict[selectedPlayer]);
 
 		//Get scores for selected player
-		var graphScores = [];
-		for (var y = 0; y<playerToScoreArrayDict[selectedPlayer].length; y++) {
-			graphScores.push(playerToScoreArrayDict[selectedPlayer][y].score);
-		}
+		var graphScores = getScoresForPlayer(selectedPlayer);
 
 		//Make wins a different color
 		var highlightedWinPointBackgroundColors = [];
