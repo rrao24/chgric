@@ -89,17 +89,91 @@ $( document ).ready(function() {
 				}
 
 				//Create interactive HTML option for user
-				var playerOptionStr = 'Display Line Graph For: <select id="playerOption" name="players">';
-				var playerNames = Object.keys(playerToScoreArrayDict);
-				for (var p = 0; p < playerNames.length; p++) {
-					playerOptionStr += '<option value="' + playerNames[p] + '">' + playerNames[p] + '</option>';
-				}
-				playerOptionStr += '</select>';
-				$('#playerSelect').append(playerOptionStr);
+				var chartOptionStr = 'Display <select id="chartOption" name="charts">';
+				chartOptionStr += '<option value="--"--</option>';
+				chartOptionStr += '<option value="Pie">Pie</option>';
+				chartOptionStr += '<option value="Line">Line</option>';
+				chartOptionStr += '</select> Graph';
+				$('#playerSelect').append(chartOptionStr);
 			}
 		});
-		
-		
+    });
+
+    //Generate pie chart
+    $(document).on('change', '#chartOption', function(e) {
+    	e.stopPropagation();
+    	e.preventDefault();
+
+    	//Remove existing chart, if it exists
+    	if (chart) {
+    		chart.destroy();
+    	}
+    	//Remove existing legend and winpct, if it exists
+    	$('#visualLegend').empty();
+    	$('#winPct').empty();
+
+    	var selectedChartType = $('#chartOption').val();
+    	var ctx = document.getElementById('gricVisual').getContext('2d');
+
+    	if (selectedChartType == 'Pie') {
+    		//Rebuild graph options UI
+    		$('#playerSelect').empty();
+    		var chartOptionStr = 'Display <select id="chartOption" name="charts">';
+    		chartOptionStr += '<option value="--"--</option>';
+			chartOptionStr += '<option value="Pie" selected="selected">Pie</option>';
+			chartOptionStr += '<option value="Line">Line</option>';
+			chartOptionStr += '</select> Graph';
+			$('#playerSelect').append(chartOptionStr);
+
+			//Store all player names
+    		var xLabels = [];
+    		var names = Object.keys(playerToScoreArrayDict);
+    		for (var q = 0; q<names.length; q++) {
+    			xLabels.push(names[q]);
+    		}
+
+    		//Get wins by each player, in order of xLabels
+    		var graphWins = [];
+    		var winsByPlayer = {};
+    		for (var k = 0; k < gameWinners.length; k++) {
+    			if (!winsByPlayer[gameWinners[k]]) {
+    				winsByPlayer[gameWinners[k]] = 1;
+    			} else {
+    				winsByPlayer[gameWinners[k]]++;
+    			}
+    		}
+    		for (var y = 0; y<xLabels.length; y++) {
+    			graphWins.push(winsByPlayer[xLabels[y]]);
+    		}
+
+    		//Get as many background colors as players
+    		var graphColors = [];
+    		for (var x = 0; x<xLabels.length; x++) {
+    			graphColors.push(backgroundColors[x]);
+    		}
+
+    		//Create chart
+    		chart = new Chart(ctx, {
+    			type: 'pie',
+    			data: {
+    				labels: xLabels,
+    				datasets: [{
+    					label: "Wins",
+    					backgroundColor: graphColors,
+    					data: graphWins
+    				}]
+    			}
+    		});
+    	} else if (selectedChartType == "Line") {
+    		//Generate custom player options for line chart
+    		var playerOptionStr = ' For: <select id="playerOption" name="players">';
+    		var playerNames = Object.keys(playerToScoreArrayDict);
+			for (var p = 0; p < playerNames.length; p++) {
+				playerOptionStr += '<option value="' + playerNames[p] + '">' + playerNames[p] + '</option>';
+			}
+			playerOptionStr += '</select>';
+			$('#playerSelect').append(playerOptionStr);
+    	}
     });
 
     //Generate associated line graph for scores upon user clicking a player's name
