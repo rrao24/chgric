@@ -1,23 +1,23 @@
-	//Holds names of all pages on site
-	var pages = ["home","table","graph","search"];
+/** Global Variables **/
 
+//Holds names of all pages on site
+var pages = ["home","table","graph","search"];
+
+//Hold all game objects to be used by any and all functions
+var games = [];
+
+//Hold mapping of player name to associated array of scores
+//used by graphing function
+var playerToScoreArrayDict = {};
+
+//Dictionary of game number to winner of game
+var gameWinners = [""];
+
+//Hold current chart
+var chart;
 
 $( document ).ready(function() {
 	changePage("home");
-	/** Global Variables **/
-
-	//Hold all game objects to be used by any and all functions
-	var games = [];
-
-	//Hold mapping of player name to associated array of scores
-	//used by graphing function
-	var playerToScoreArrayDict = {};
-
-	//Dictionary of game number to winner of game
-	var gameWinners = [""];
-
-	//Hold current chart
-	var chart;
 
 	//Get data from csv
     $( "#target" ).load("https://rrao24.github.io/chgric/gric.csv", function() {
@@ -89,197 +89,40 @@ $( document ).ready(function() {
 				}
 
 				//Create interactive HTML option for user
-				var chartOptionStr = 'Display <select id="chartOption" name="charts">';
-				chartOptionStr += '<option value="--"--</option>';
-				chartOptionStr += '<option value="Pie">Pie</option>';
-				chartOptionStr += '<option value="Line">Line</option>';
-				chartOptionStr += '</select> Graph';
-				$('#playerSelect').append(chartOptionStr);
+				generateChartUI();
 			}
 		});
     });
 
-    //Generate pie chart
+    //Generate chart
     $(document).on('change', '#chartOption', function(e) {
-    	e.stopPropagation();
-    	e.preventDefault();
-
-    	//Remove existing chart, if it exists
-    	if (chart) {
-    		chart.destroy();
-    	}
-    	//Remove existing legend and winpct, if it exists
-    	$('#visualLegend').empty();
-    	$('#winPct').empty();
+    	cleanUpChart(e);
 
     	var selectedChartType = $('#chartOption').val();
     	var ctx = document.getElementById('gricVisual').getContext('2d');
 
     	if (selectedChartType == 'Pie') {
-    		//Rebuild graph options UI
-    		$('#playerSelect').empty();
-    		var chartOptionStr = 'Display <select id="chartOption" name="charts">';
-    		chartOptionStr += '<option value="--"--</option>';
-			chartOptionStr += '<option value="Pie" selected="selected">Pie</option>';
-			chartOptionStr += '<option value="Line">Line</option>';
-			chartOptionStr += '</select> Graph';
-			$('#playerSelect').append(chartOptionStr);
 
-			//Store all player names who have won a game
-    		var xLabels = [];
-    		var names = Object.keys(playerToScoreArrayDict);
-    		for (var q = 0; q<names.length; q++) {
-    			if (gameWinners.indexOf(names[q]) > 0) {
-    				xLabels.push(names[q]);
-    			}
-    		}
+    		buildPieChart(ctx);
 
-    		//Get wins by each player, in order of xLabels
-    		var graphWins = [];
-    		var winsByPlayer = {};
-    		for (var k = 0; k < gameWinners.length; k++) {
-    			if (!winsByPlayer[gameWinners[k]]) {
-    				winsByPlayer[gameWinners[k]] = 1;
-    			} else {
-    				winsByPlayer[gameWinners[k]]++;
-    			}
-    		}
-    		for (var y = 0; y<xLabels.length; y++) {
-    			graphWins.push(winsByPlayer[xLabels[y]]);
-    		}
-
-    		//Get as many background colors as players
-    		var graphColors = [];
-    		for (var x = 0; x<xLabels.length; x++) {
-    			graphColors.push(backgroundColors[x]);
-    		}
-
-    		//Create chart
-    		chart = new Chart(ctx, {
-    			type: 'pie',
-    			data: {
-    				labels: xLabels,
-    				datasets: [{
-    					label: "Wins",
-    					backgroundColor: graphColors,
-    					data: graphWins
-    				}]
-    			}
-    		});
     	} else if (selectedChartType == "Line") {
-    		
-    		//Generate custom player options for line chart
-    		var playerOptionStr = ' For: <select id="playerOption" name="players">';
-    		playerOptionStr += '<option value="default">--</option>'
-    		var playerNames = Object.keys(playerToScoreArrayDict);
-			for (var p = 0; p < playerNames.length; p++) {
-				playerOptionStr += '<option value="' + playerNames[p] + '">' + playerNames[p] + '</option>';
-			}
-			playerOptionStr += '</select>';
-			$('#playerSelect').append(playerOptionStr);
+
+    		generateLineChartOptions();
+
+    	} else {
+
+    		resetChartUI();
     	}
     });
 
     //Generate associated line graph for scores upon user clicking a player's name
     $(document).on('change', '#playerOption', function(e) {
-    	e.stopPropagation();
-    	e.preventDefault();
-
-    	//Remove existing chart, if it exists
-    	if (chart) {
-    		chart.destroy();
-    	}
-    	//Remove existing legend and winpct, if it exists
-    	$('#visualLegend').empty();
-    	$('#winPct').empty();
+    	cleanUpChart(e);
 
     	var selectedPlayer = $('#playerOption').val();
     	var ctx = document.getElementById('gricVisual').getContext('2d');
 
-    	//execute if change is legitimate
-    	if (selectedPlayer !== "default") {
-
-	    	//Create labels for each data point
-			var xLabels = [];
-			for (var q = 0; q<playerToScoreArrayDict[selectedPlayer].length; q++) {
-				var v = q+1;
-				xLabels.push("Game #" + v);
-			}
-
-			//Get scores for selected player
-			var graphScores = [];
-			for (var y = 0; y<playerToScoreArrayDict[selectedPlayer].length; y++) {
-				graphScores.push(playerToScoreArrayDict[selectedPlayer][y].score);
-			}
-
-			//Make wins a different color
-			var highlightedWinPointBackgroundColors = [];
-
-			//Initialize chart with xLabels, graphScores
-			chart = new Chart(ctx, {
-			    type: 'line',
-			    data: {
-			        labels: xLabels,
-			        datasets: [{
-			            label: "Score",
-			            fill: false,
-			            pointBackgroundColor: highlightedWinPointBackgroundColors,
-			            backgroundColor: 'rgb(255, 99, 132)',
-			            borderColor: 'rgb(255, 99, 132)',
-			            data: graphScores,
-			        }]
-			    },
-			    options: {
-			    	//Disable auto generated legend
-			    	legend: {
-			    		display: false
-			    	},
-			    	//Custom legend function
-			    	legendCallback: function(chart) {
-			    		var text = [];
-				 		text.push('<ul class="0-legend">');
-				 		for (var i = 0; i < chart.data.datasets.length; i++) {
-				 			text.push('<li><span style="background-color:' 
-				 				+ chart.data.datasets[i].backgroundColor + '"></span>');
-				 			if (chart.data.datasets[i].label) {
-				 				text.push(chart.data.datasets[i].label);
-				 			}
-				 			text.push('</li>');
-				 		}
-				 		text.push('<li><span style="background-color:yellow"></span>Win</li>');
-				 		text.push('</ul>'); 
-				 		return text.join('');
-			    	},
-			    	scales: {
-			    		xAxes: [{
-			    			display: false
-			    		}]
-			    	}
-			    }
-			});
-
-			//Append custom legend
-			$('#visualLegend').append(chart.generateLegend());
-
-			//Used to calculate win percentage
-			var wins = 0;
-
-			//Update chart with different colors for wins
-			for (var x = 0; x<playerToScoreArrayDict[selectedPlayer].length; x++) {
-				var currGame = playerToScoreArrayDict[selectedPlayer][x].gameNumber;
-				if (gameWinners[currGame] == selectedPlayer) {
-					highlightedWinPointBackgroundColors.push("yellow");
-					wins++;
-				} else {
-					highlightedWinPointBackgroundColors.push("rgb(255, 99, 132)");
-				}
-			}
-			chart.update();
-
-			//Display win percentage
-			var winPct = (wins/(playerToScoreArrayDict[selectedPlayer].length)).toFixed(2);
-			$('#winPct').append('Win Percentage: ' + winPct);
-		}
+    	buildLineGraph(ctx, selectedPlayer);
     });
 });
 
