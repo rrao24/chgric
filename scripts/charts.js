@@ -63,50 +63,6 @@ function generateMoreLineChartOptions() {
 	$('#againstOption').chosen();
 }
 
-function buildMultiLineGraph(ctx, initialPlayer, selectedPlayers) {
-	//Get games
-	selectedPlayers.push(initialPlayer);
-	var games = getGamesForPlayers(selectedPlayers);
-
-	//Create labels for each data point
-	var xLabels = getLabelsPerGame(games);
-
-	//Different color for each player
-	var graphColors = getBackgroundColors(selectedPlayers);
-
-	//Get scores for each player
-	var scoresForPlayers = getScoresForPlayersOverGames(selectedPlayers, games);
-	console.log(scoresForPlayers);
-
-	//Create a dataset for each player
-	var datasets = [];
-	for (var i = 0; i < selectedPlayers.length; i++) {
-		datasets[i] = {
-			label: selectedPlayers[i],
-			fill: false,
-			backgroundColor: graphColors[i],
-			borderColor: graphColors[i],
-			data: scoresForPlayers[selectedPlayers[i]]
-		};
-	}
-
-	//Create chart
-	chart = new Chart(ctx, {
-		type: 'line',
-		data: {
-			labels: xLabels,
-			datasets: datasets
-		},
-		options: {
-			scales: {
-				xAxes: [{
-					display: false
-				}]
-			}
-		}
-	});
-}
-
 function buildLineGraph(ctx, selectedPlayer) {
 	//execute if change is legitimate
 	if (selectedPlayer !== "default") {
@@ -185,6 +141,49 @@ function buildLineGraph(ctx, selectedPlayer) {
 		var winPct = (wins/(playerToScoreArrayDict[selectedPlayer].length)).toFixed(2);
 		$('#winPct').append('Win Percentage: ' + winPct);
 	}
+}
+
+function buildMultiLineGraph(ctx, initialPlayer, selectedPlayers) {
+	//Get games
+	selectedPlayers.push(initialPlayer);
+	var games = getGamesForPlayers(selectedPlayers);
+
+	//Create labels for each data point
+	var xLabels = getLabelsPerGame(games);
+
+	//Different color for each player
+	var graphColors = getBackgroundColors(selectedPlayers);
+
+	//Get scores for each player
+	var scoresForPlayers = getScoresForPlayersOverGames(selectedPlayers, games);
+
+	//Create a dataset for each player
+	var datasets = [];
+	for (var i = 0; i < selectedPlayers.length; i++) {
+		datasets[i] = {
+			label: selectedPlayers[i],
+			fill: false,
+			backgroundColor: graphColors[i],
+			borderColor: graphColors[i],
+			data: scoresForPlayers[selectedPlayers[i]]
+		};
+	}
+
+	//Create chart
+	chart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: xLabels,
+			datasets: datasets
+		},
+		options: {
+			scales: {
+				xAxes: [{
+					display: false
+				}]
+			}
+		}
+	});
 }
 
 function cleanUpChart(e) {
