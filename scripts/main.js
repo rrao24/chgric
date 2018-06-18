@@ -60,15 +60,21 @@ $( document ).ready(function() {
 						game.players.push(playerStats);
 					} else {
 						currentGame++;
-						game = deriveStats(game, gameWinners);
-						games.push(game);
-						game = {};
-						i--;
+						//catch cases of 1 off excel sheet
+						if (game.players) {
+							game = deriveStats(game, gameWinners);
+							games.push(game);
+							game = {};
+							i--;
+						}
 					}
 				}
 
-				game = deriveStats(game, gameWinners);
-				games.push(game);
+				//catch cases of 1 off excel sheet
+				if (game.players) {
+					game = deriveStats(game, gameWinners);
+					games.push(game);
+				}
 
 				$('#target').append('<br><br>');
 				$('#target').append(JSON.stringify(games));
