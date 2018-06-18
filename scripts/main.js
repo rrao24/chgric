@@ -1,7 +1,7 @@
 /** Global Variables **/
 
 //Holds names of all pages on site
-var pages = ["home","table","graph","search"];
+var pages = ["home","table","graph","stats"];
 
 //Hold all game objects to be used by any and all functions
 var games = [];

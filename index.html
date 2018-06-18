@@ -58,7 +58,7 @@
 		 <li><a id="home_link"  href="#" onclick="changePage('home')";>Home</a></li>
 		 <li><a id="table_link" href="#" onclick="changePage('table')">Tables</a></li>
 		 <li><a id="graph_link" href="#" onclick="changePage('graph')">Graphs</a></li>
-		 <li><a id="search_link"href="#" onclick="changePage('search')">Search</a></li>
+		 <li><a id="stats_link"href="#" onclick="changePage('stats')">Statistics</a></li>
 		 </ul>
 		</div>
 		</div>
@@ -220,19 +220,21 @@
 		</div>
 		<!-- Container for chart and legend ––––––––––––––––––––––––––––––––– -->
 		<div class="row" id="visualContainer">
-			<!-- This is the legend ––––––––––––––––––––––––––––––––– -->
-			<div id="visualLegend"></div>
-			<!-- This is the actual chart ––––––––––––––––––––––––––––––––– -->
-			<canvas id="gricVisual"></canvas>
-			<div id="winPct"></div>
+			<div class="twelve columns">
+				<!-- This is the legend ––––––––––––––––––––––––––––––––– -->
+				<div id="visualLegend"></div>
+				<!-- This is the actual chart ––––––––––––––––––––––––––––––––– -->
+				<canvas id="gricVisual"></canvas>
+				<div id="winPct"></div>
+			</div>
 		</div>
 	</div>
 
 	<!-- Search Page ––––––––––––––––––––––––––––––––– -->
-	<div id="search" class="container" hidden>
+	<div id="stats" class="container" hidden>
 		<div class="row">
 			<div class="twelve columns">
-				<p>Searching and querying are coming soon!</p>
+				<p>Statistics coming soon!</p>
 			</div>
 		</div>
 	</div>
