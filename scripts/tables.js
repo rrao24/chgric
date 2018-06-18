@@ -18,10 +18,6 @@ function generateTableFromGame(game) {
 	//checking if expansion game
 	var isFOTM = false;
 	for (var j = 0; j < game.numberOfPlayers; j++) {
-		if(game.gameNumber==134){
-			console.log(game);
-			debugger;
-		}
 		if (game.players[j].horses != 0) {
 			isFOTM = true;
 			break;
