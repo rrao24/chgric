@@ -16,3 +16,13 @@
 #nav {
  margin-top: 20px;
 }
+
+/* Table css */
+.btop {
+	border-top: 2px solid black; }
+.bright {
+	border-right: 2px solid black; }
+.bbottom {
+	border-bottom: 2px solid black; }
+.bleft {
+	border-left: 2px solid black; }

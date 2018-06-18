@@ -96,6 +96,9 @@ $( document ).ready(function() {
 
 				//Create interactive HTML option for user
 				generateChartUI();
+				
+				//Create tables of all games
+				generateTables();
 			}
 		});
     });
