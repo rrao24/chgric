@@ -152,6 +152,11 @@ function buildMultiLineGraph(ctx, initialPlayer, selectedPlayers) {
 	//Get games
 	selectedPlayers.push(initialPlayer);
 	var games = getGamesForPlayers(selectedPlayers);
+	//Store game numbers for which all selected players have participated in
+	var gameNumbers = [];
+	for (var i = 0; i < games.length; i++) {
+		gameNumbers.push(games[i].gameNumber);
+	}
 
 	//Create labels for each data point
 	var xLabels = getLabelsPerGame(games);
@@ -162,12 +167,19 @@ function buildMultiLineGraph(ctx, initialPlayer, selectedPlayers) {
 	//Get scores for each player
 	var scoresForPlayers = getScoresForPlayersOverGames(selectedPlayers, games);
 
+	//highlight wins
+	var highlightedWinPointBackgroundColors = [];
+	for (var m = 0; m < selectedPlayers.length; m++) {
+		highlightedWinPointBackgroundColors[m] = [];
+	}
+
 	//Create a dataset for each player
 	var datasets = [];
 	for (var i = 0; i < selectedPlayers.length; i++) {
 		datasets[i] = {
 			label: selectedPlayers[i],
 			fill: false,
+			pointBackgroundColor: highlightedWinPointBackgroundColors[i],
 			backgroundColor: graphColors[i],
 			borderColor: graphColors[i],
 			data: scoresForPlayers[selectedPlayers[i]]
@@ -189,6 +201,21 @@ function buildMultiLineGraph(ctx, initialPlayer, selectedPlayers) {
 			}
 		}
 	});
+
+	//Update chart with different colors for wins
+	for (var x=0; x<selectedPlayers.length; x++) {
+		for (var y=0; y<playerToScoreArrayDict[selectedPlayers[x]].length; y++) {
+			var currGame = playerToScoreArrayDict[selectedPlayers[x]][y].gameNumber;
+			if (gameNumbers.indexOf(currGame) >= 0) {
+				if (gameWinners[currGame].indexOf(selectedPlayers[x]) >= 0) {
+					highlightedWinPointBackgroundColors[x].push("yellow");
+				} else {
+					highlightedWinPointBackgroundColors[x].push(graphColors[x]);
+				}
+			}
+		}
+	}
+	chart.update();
 }
 
 function cleanUpChart(e) {
