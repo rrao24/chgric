@@ -128,7 +128,7 @@ function buildLineGraph(ctx, selectedPlayer) {
 		//Update chart with different colors for wins
 		for (var x = 0; x<playerToScoreArrayDict[selectedPlayer].length; x++) {
 			var currGame = playerToScoreArrayDict[selectedPlayer][x].gameNumber;
-			if (gameWinners[currGame] == selectedPlayer) {
+			if (gameWinners[currGame].indexOf(selectedPlayer) >= 0) {
 				highlightedWinPointBackgroundColors.push("yellow");
 				wins++;
 			} else {

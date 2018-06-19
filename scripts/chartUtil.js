@@ -3,10 +3,11 @@
 //Returns array of names of players who have won a game
 function getWinnersUnique() {
 	var winners = [];
-	var names = Object.keys(playerToScoreArrayDict);
-	for (var q = 0; q<names.length; q++) {
-		if (gameWinners.indexOf(names[q]) > 0) {
-			winners.push(names[q]);
+	for (var q = 0; q<gameWinners.length; q++) {
+		for (var r = 0; r<gameWinners[q].length; r++) {
+			if (winners.indexOf(gameWinners[q][r]) < 0) {
+				winners.push(gameWinners[q][r]);
+			}
 		}
 	}
 	return winners;
@@ -16,10 +17,12 @@ function getWinnersUnique() {
 function getWinsByPlayer() {
 	var winsByPlayer = {};
 	for (var k = 0; k < gameWinners.length; k++) {
-		if (!winsByPlayer[gameWinners[k]]) {
-			winsByPlayer[gameWinners[k]] = 1;
-		} else {
-			winsByPlayer[gameWinners[k]]++;
+		for (var l = 0; l < gameWinners.length; l++) {
+			if (!winsByPlayer[gameWinners[k][l]]) {
+				winsByPlayer[gameWinners[k][l]] = 1;
+			} else {
+				winsByPlayer[gameWinners[k][l]]++;
+			}
 		}
 	}
 	return winsByPlayer;
@@ -87,26 +90,30 @@ function getGamesForPlayers(playerNames) {
 	return gamesIncludingAllPlayers;
 }
 
-//Get winner, max score, average score of game object
+//Get winners, max score, average score of game object
 function deriveStats(game, gameWinners) {
 	var maxScore = 0;
 	var avgScore = 0;
-	var winner = "";
+	var winners = [];
 	for (var j = 0; j < game.players.length; j++) {
 		if (game.players[j].total > maxScore) {
 			maxScore = game.players[j].total;
-			winner = game.players[j].name;
 		}
 		avgScore += game.players[j].total;
+	}
+	for (var k = 0; k < game.players.length; k++) {
+		if (game.players[k].total == maxScore) {
+			winners.push(game.players[k].name);
+		}
 	}
 	avgScore = avgScore / game.players.length;
 	avgScore = avgScore.toFixed(2);
 	game.maxScore = maxScore;
-	game.winner = winner;
+	game.winners = winners;
 	game.avgScore = avgScore;
 
 	//Update gameWinners dictionary
-	gameWinners.push(winner);
+	gameWinners.push(winners);
 
 	return game;
 }
