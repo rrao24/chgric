@@ -90,6 +90,19 @@ function getGamesForPlayers(playerNames) {
 	return gamesIncludingAllPlayers;
 }
 
+//Get running average of an array of scores
+function getRunningAverage(scoresArr) {
+	var runningAvgArr = [];
+	var runningCount = 0;
+	for (var i = 0; i < scoresArr.length; i++) {
+		var divideBy = i + 1;
+		runningCount += scoresArr[i];
+		var runningAvg = runningCount / divideBy;
+		runningAvgArr.push(runningAvg);
+	}
+	return runningAvgArr;
+}
+
 //Get winners, max score, average score of game object
 function deriveStats(game, gameWinners) {
 	var maxScore = 0;

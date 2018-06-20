@@ -73,6 +73,9 @@ function buildLineGraph(ctx, selectedPlayer) {
 		//Get scores for selected player
 		var graphScores = getScoresForPlayer(selectedPlayer);
 
+		//Get running average
+		var runningAverage = getRunningAverage(graphScores);
+
 		//Make wins a different color
 		var highlightedWinPointBackgroundColors = [];
 
@@ -88,6 +91,13 @@ function buildLineGraph(ctx, selectedPlayer) {
 		            backgroundColor: 'rgb(255, 99, 132)',
 		            borderColor: 'rgb(255, 99, 132)',
 		            data: graphScores,
+		        },
+		        {
+		        	label: "Running Average",
+		        	fill: false,
+		        	backgroundColor: 'rgb(255, 99, 132)',
+		            borderColor: 'rgb(255, 99, 132)',
+		            data: runningAverage
 		        }]
 		    },
 		    options: {
