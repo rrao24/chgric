@@ -113,6 +113,23 @@ function getGameByGameNumber(gameNumber) {
 	return;
 }
 
+//Function to be called when creating custom legend
+function legendCallback(chart) {
+	var text = [];
+	text.push('<ul class="0-legend">');
+	for (var i = 0; i < chart.data.datasets.length; i++) {
+		text.push('<li><span style="background-color:' 
+			+ chart.data.datasets[i].backgroundColor + '"></span>');
+		if (chart.data.datasets[i].label) {
+			text.push(chart.data.datasets[i].label);
+		}
+		text.push('</li>');
+	}
+	text.push('<li><span style="background-color:yellow"></span>Win</li>');
+	text.push('</ul>'); 
+	return text.join('');
+}
+
 //Get winners, max score, average score of game object
 function deriveStats(game, gameWinners) {
 	var maxScore = 0;

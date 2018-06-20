@@ -80,7 +80,7 @@ function buildLineGraph(ctx, selectedPlayer) {
 		var highlightedWinPointBackgroundColors = [];
 
 		//get random background color
-		var rndmColor = getBackgroundColors([""]);
+		var rndmColor = getBackgroundColors(["", ""]);
 
 		//Initialize chart with xLabels, graphScores
 		chart = new Chart(ctx, {
@@ -98,8 +98,8 @@ function buildLineGraph(ctx, selectedPlayer) {
 		        {
 		        	label: "Running Average",
 		        	fill: false,
-		        	backgroundColor: 'rgb(255, 99, 132)',
-		            borderColor: 'rgb(255, 99, 132)',
+		        	backgroundColor: rndmColor[1],
+		            borderColor: rndmColor[1],
 		            data: runningAverage
 		        }]
 		    },
@@ -109,21 +109,7 @@ function buildLineGraph(ctx, selectedPlayer) {
 		    		display: false
 		    	},
 		    	//Custom legend function
-		    	legendCallback: function(chart) {
-		    		var text = [];
-			 		text.push('<ul class="0-legend">');
-			 		for (var i = 0; i < chart.data.datasets.length; i++) {
-			 			text.push('<li><span style="background-color:' 
-			 				+ chart.data.datasets[i].backgroundColor + '"></span>');
-			 			if (chart.data.datasets[i].label) {
-			 				text.push(chart.data.datasets[i].label);
-			 			}
-			 			text.push('</li>');
-			 		}
-			 		text.push('<li><span style="background-color:yellow"></span>Win</li>');
-			 		text.push('</ul>'); 
-			 		return text.join('');
-		    	},
+		    	legendCallback: legendCallback,
 		    	scales: {
 		    		xAxes: [{
 		    			display: false
@@ -202,6 +188,11 @@ function buildMultiLineGraph(ctx, initialPlayer, selectedPlayers) {
 			datasets: datasets
 		},
 		options: {
+			legend: {
+		    		display: false
+		    	},
+		    	//Custom legend function
+		    	legendCallback: legendCallback,
 			scales: {
 				xAxes: [{
 					display: false
@@ -223,7 +214,11 @@ function buildMultiLineGraph(ctx, initialPlayer, selectedPlayers) {
 			}
 		}
 	}
+
 	chart.update();
+
+	//Append custom legend
+	$('#visualLegend').append(chart.generateLegend());
 }
 
 function cleanUpChart(e) {
