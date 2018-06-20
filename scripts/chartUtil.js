@@ -98,7 +98,7 @@ function getRunningAverage(scoresArr) {
 		var divideBy = i + 1;
 		runningCount += scoresArr[i];
 		var runningAvg = runningCount / divideBy;
-		runningAvgArr.push(runningAvg);
+		runningAvgArr.push(runningAvg.toFixed(2));
 	}
 	return runningAvgArr;
 }
