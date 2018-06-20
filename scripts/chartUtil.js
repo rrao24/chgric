@@ -42,7 +42,7 @@ function getBackgroundColors(arr) {
 function getLabelsPerGame(games) {
 	var xLabels = [];
 	for (var q = 0; q<games.length; q++) {
-		var v = q+1;
+		var v = games[q].gameNumber;
 		xLabels.push("Game #" + v);
 	}
 	return xLabels;

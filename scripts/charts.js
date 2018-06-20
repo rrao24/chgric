@@ -68,7 +68,7 @@ function buildLineGraph(ctx, selectedPlayer) {
 	if (selectedPlayer !== "default") {
 
     	//Create labels for each data point
-		var xLabels = getLabelsPerGame(playerToScoreArrayDict[selectedPlayer]);
+    	var xLabels = getLabelsPerGame(getGamesForPlayers([selectedPlayer]));
 
 		//Get scores for selected player
 		var graphScores = getScoresForPlayer(selectedPlayer);
@@ -79,6 +79,9 @@ function buildLineGraph(ctx, selectedPlayer) {
 		//Make wins a different color
 		var highlightedWinPointBackgroundColors = [];
 
+		//get random background color
+		var rndmColor = getBackgroundColors([""]);
+
 		//Initialize chart with xLabels, graphScores
 		chart = new Chart(ctx, {
 		    type: 'line',
@@ -88,8 +91,8 @@ function buildLineGraph(ctx, selectedPlayer) {
 		            label: "Score",
 		            fill: false,
 		            pointBackgroundColor: highlightedWinPointBackgroundColors,
-		            backgroundColor: 'rgb(255, 99, 132)',
-		            borderColor: 'rgb(255, 99, 132)',
+		            backgroundColor: rndmColor[0],
+		            borderColor: rndmColor[0],
 		            data: graphScores,
 		        },
 		        {
@@ -132,9 +135,6 @@ function buildLineGraph(ctx, selectedPlayer) {
 		//Used to calculate win percentage
 		var wins = 0;
 
-		//get random background color
-		var rndmColor = getBackgroundColors([""]);
-
 		//Update chart with different colors for wins
 		for (var x = 0; x<playerToScoreArrayDict[selectedPlayer].length; x++) {
 			var currGame = playerToScoreArrayDict[selectedPlayer][x].gameNumber;
@@ -142,9 +142,7 @@ function buildLineGraph(ctx, selectedPlayer) {
 				highlightedWinPointBackgroundColors.push("yellow");
 				wins++;
 			} else {
-				highlightedWinPointBackgroundColors.push(rndmColor);
-				chart.data.datasets[0].borderColor = rndmColor;
-				chart.data.datasets[0].backgroundColor = rndmColor;
+				highlightedWinPointBackgroundColors.push(rndmColor[0]);
 			}
 		}
 		chart.update();
