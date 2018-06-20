@@ -150,6 +150,49 @@ $( document ).ready(function() {
     		buildLineGraph(ctx, initialPlayer);
     	}
     });
+
+    //What to do when someone clicks on a chart point
+    $(document).on('click', '#gricVisual', function(e) {
+    	e.stopPropagation();
+    	e.preventDefault();
+
+    	//get game number of point in interest
+		var activePoints = chart.getElementsAtEvent(e);
+		var firstPoint = activePoints[0];
+		var label = chart.data.labels[firstPoint._index];
+		label = parseInt(label.split("Game #")[1]);
+
+		//generate table
+		var gameOfInterest = getGameByGameNumber(label);
+		var table = generateTableFromGame(gameOfInterest);
+
+		//update modal content
+		var modalContent = $('.modal-content');
+		modalContent.empty();
+		modalContent.append('<span class="close">&times;</span>');
+		modalContent.append(table.html());
+
+		//display modal
+		var modal = $('#gameModal');
+		modal.show();
+    });
+
+    $(document).on('click', '.close', function(e) {
+    	e.stopPropagation();
+    	e.preventDefault();
+
+    	//hide modal
+    	var modal = $('#gameModal');
+		modal.hide();
+    });
+
+    //hide modal if click outside of modal when modal is active
+    $(document).on('click', '#gameModal', function(e) {
+    	if (!$(e.target).hasClass('modal-content')) {
+    		var modal = $('#gameModal');
+    		modal.hide();
+    	}
+    });
 });
 
 //Switches between pages on site

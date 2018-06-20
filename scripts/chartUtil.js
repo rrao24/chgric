@@ -103,6 +103,16 @@ function getRunningAverage(scoresArr) {
 	return runningAvgArr;
 }
 
+//Get game by game number
+function getGameByGameNumber(gameNumber) {
+	for (var i = 0; i < games.length; i++) {
+		if (games[i].gameNumber == gameNumber) {
+			return games[i];
+		}
+	}
+	return;
+}
+
 //Get winners, max score, average score of game object
 function deriveStats(game, gameWinners) {
 	var maxScore = 0;
