@@ -31,6 +31,6 @@ table caption {
 	text-align: left;
 }
 
-.gameTable td {
+.gameTable tr ~ tr td ~ td {
 	font-family: 'Indie Flower', cursive;
 }

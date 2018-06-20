@@ -170,7 +170,7 @@ $( document ).ready(function() {
 		var modalContent = $('.modal-content');
 		modalContent.empty();
 		modalContent.append('<span class="close">&times;</span>');
-		modalContent.append(table.html());
+		modalContent.append(table);
 
 		//display modal
 		var modal = $('#gameModal');
