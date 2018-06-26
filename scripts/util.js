@@ -28,3 +28,8 @@ function intersectArrays(a, b) {
         return b.indexOf(e) > -1;
     });
 }
+
+//Capitalize
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}

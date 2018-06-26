@@ -22,7 +22,7 @@ function generateStatistics(playerName) {
 		statsObj.boar = {avg: 0, stdev: 0};
 		statsObj.cattle = {avg: 0, stdev: 0};
 		statsObj.unused = {avg: 0, stdev: 0};
-		statsObj.fencedStables = {avg: 0, stdev: 0};
+		statsObj.fenced_stables = {avg: 0, stdev: 0};
 		statsObj.rooms = {avg: 0, stdev: 0};
 		statsObj.family = {avg: 0, stdev: 0};
 		statsObj.cards = {avg: 0, stdev: 0};
@@ -43,7 +43,7 @@ function generateStatistics(playerName) {
 					statsObj.boar.avg += stats.boar;
 					statsObj.cattle.avg += stats.cattle;
 					statsObj.unused.avg += stats.unused;
-					statsObj.fencedStables.avg += stats.fencedStables;
+					statsObj.fenced_stables.avg += stats.fencedStables;
 					statsObj.rooms.avg += stats.clayRooms;
 					statsObj.rooms.avg += stats.stoneRooms;
 					statsObj.family.avg += stats.family;
@@ -73,7 +73,7 @@ function generateStatistics(playerName) {
 					statsObj.boar.stdev += Math.pow((stats.boar - statsObj.boar.avg), 2);
 					statsObj.cattle.stdev += Math.pow((stats.cattle - statsObj.cattle.avg), 2);
 					statsObj.unused.stdev += Math.pow((stats.unused - statsObj.unused.avg), 2);
-					statsObj.fencedStables.stdev += Math.pow((stats.fencedStables - statsObj.fencedStables.avg), 2);
+					statsObj.fenced_stables.stdev += Math.pow((stats.fencedStables - statsObj.fenced_stables.avg), 2);
 					statsObj.rooms.stdev += Math.pow((stats.clayRooms + stats.stoneRooms - statsObj.rooms.avg), 2);
 					statsObj.family.stdev += Math.pow((stats.family - statsObj.family.avg), 2);
 					statsObj.cards.stdev += Math.pow((stats.cards - statsObj.cards.avg), 2);
@@ -91,7 +91,8 @@ function generateStatistics(playerName) {
 		for (var k in statsObj) {
 			if (k !== "gamesPlayed") {
 				statsObj[k].stdev = Math.pow((statsObj[k].stdev / statsObj.gamesPlayed), 0.5).toFixed(2);
-				var row = $('<tr><td>' + k.replace("avg", "") + '</td><td>' + statsObj[k].avg + '</td><td>' + statsObj[k].stdev + '</td></tr>');
+				var appendableKey = capitalizeFirstLetter(k).replace("avg", "").replace("_", " ").replace("stables", "Stables");
+				var row = $('<tr><td>' + appendableKey + '</td><td>' + statsObj[k].avg + '</td><td>' + statsObj[k].stdev + '</td></tr>');
 				averagesTable.append(row);
 			}
 		}
