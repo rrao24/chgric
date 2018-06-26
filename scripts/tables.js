@@ -30,7 +30,7 @@ function generateTableFromGame(game) {
 		rowDictKey.splice(8, 1);
 	}
 	
-	var table = $('<table><caption>Game '+game.gameNumber+'</cation></table>').attr('id', 'game_'+game.gameNumber+'_table').addClass("u-max-full-width").addClass("gameTable");
+	var table = $('<table><caption>Game '+game.gameNumber+'</caption></table>').attr('id', 'game_'+game.gameNumber+'_table').addClass("u-max-full-width").addClass("gameTable");
 	for (var i = 0; i < rowNames.length; i++) {
 		var row = $('<tr></tr>').addClass(rowDictKey[i]).append('<td>'+rowNames[i]+'</td>');
 		for (var j = 0; j < game.numberOfPlayers; j++) {

@@ -94,11 +94,14 @@ $( document ).ready(function() {
 					}
 				}
 
-				//Create interactive HTML option for user
+				//Create interactive HTML charts option for user
 				generateChartUI();
 				
 				//Create tables of all games
 				generateTables();
+
+				//Create interactive HTML statistics option for user
+				generateStatsUI();
 			}
 		});
     });
@@ -192,6 +195,15 @@ $( document ).ready(function() {
     		var modal = $('#gameModal');
     		modal.hide();
     	}
+    });
+
+    //generate stats for a player
+    $(document).on('change', '#statsSelect', function(e) {
+    	e.stopPropagation();
+    	e.preventDefault();
+
+    	var player = $('#statsOption').val();
+    	generateStatistics(player);
     });
 });
 
