@@ -1,5 +1,7 @@
 /** Module for utility functions related to building charts **/
 
+//LOL
+
 //Returns array of names of players who have won a game
 function getWinnersUnique() {
 	var winners = [];
